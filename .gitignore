@@ -62,5 +62,4 @@ GKlib
 
 #
 !build/xinclude/**/*
-!build/xinclude/
 
