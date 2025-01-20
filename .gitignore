@@ -60,3 +60,7 @@ graphs/*.npart.*
 GKlib
 .svn/
 
+#
+!build/xinclude/**/*
+!build/xinclude/
+
