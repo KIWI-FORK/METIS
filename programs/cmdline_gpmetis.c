@@ -4,7 +4,7 @@
 
 \date 12/24/2008
 \author George
-\version\verbatim $Id: cmdline_gpmetis.c 15927 2013-12-14 22:27:20Z karypis $\endverbatim
+\version\verbatim $Id: cmdline_gpmetis.c 13901 2013-03-24 16:17:03Z karypis $\endverbatim
 */
 
 #include "metisbin.h"
@@ -27,16 +27,11 @@ static struct gk_option long_options[] = {
   {"minconn",        0,      0,      METIS_OPTION_MINCONN},
   {"contig",         0,      0,      METIS_OPTION_CONTIG},
 
-  {"ondisk",         0,      0,      METIS_OPTION_ONDISK},
-
-  {"dropedges",      0,      0,      METIS_OPTION_DROPEDGES},
-
   {"nooutput",       0,      0,      METIS_OPTION_NOOUTPUT},
 
   {"ufactor",        1,      0,      METIS_OPTION_UFACTOR},
   {"niter",          1,      0,      METIS_OPTION_NITER},
   {"ncuts",          1,      0,      METIS_OPTION_NCUTS},
-  {"niparts",        1,      0,      METIS_OPTION_NIPARTS},
 
   {"tpwgts",         1,      0,      METIS_OPTION_TPWGTS},
   {"ubvec",          1,      0,      METIS_OPTION_UBVEC},
@@ -75,7 +70,6 @@ static gk_StringMap_t ctype_options[] = {
 static gk_StringMap_t iptype_options[] = {
  {"grow",               METIS_IPTYPE_GROW},
  {"random",             METIS_IPTYPE_RANDOM},
- {"rb",                 METIS_IPTYPE_METISRB},
  {NULL,                 0}
 };
 
@@ -178,10 +172,6 @@ static char helpstr[][100] =
 "     The load imbalance is defined in a way similar to ufactor.",
 "     If supplied, this parameter takes priority over ufactor.",
 " ",
-"  -niparts=int",
-"     Specifies the number of initial partitions to compute. The default",
-"     value is determined by the algorithm automatically.",
-" ",
 "  -niter=int",
 "     Specifies the number of iterations for the refinement algorithms",
 "     at each stage of the uncoarsening process. Default is 10.",
@@ -190,10 +180,6 @@ static char helpstr[][100] =
 "     Specifies the number of different partitionings that it will compute.",
 "     The final partitioning is the one that achieves the best edgecut or",
 "     communication volume. Default is 1.",
-" ",
-"  -ondisk",
-"     Specifies if graphs will be stored to disk during coarsening in order",
-"     to reduce memory requirements.",
 " ",
 "  -nooutput",
 "     Specifies that no partitioning file should be generated.",
@@ -248,16 +234,11 @@ params_t *parse_cmdline(int argc, char *argv[])
   params->minconn       = 0;
   params->contig        = 0;
 
-  params->ondisk        = 0;
-
-  params->dropedges     = 0;
-
   params->nooutput      = 0;
   params->wgtflag       = 3;
 
   params->ncuts         = 1;
   params->niter         = 10;
-  params->niparts       = -1;
 
   params->dbglvl        = 0;
   params->balance       = 0;
@@ -324,14 +305,6 @@ params_t *parse_cmdline(int argc, char *argv[])
         params->minconn = 1;
         break;
 
-      case METIS_OPTION_ONDISK:
-        params->ondisk = 1;
-        break;
-
-      case METIS_OPTION_DROPEDGES:
-        params->dropedges = 1;
-        break;
-
       case METIS_OPTION_NOOUTPUT:
         params->nooutput = 1;
         break;
@@ -348,9 +321,6 @@ params_t *parse_cmdline(int argc, char *argv[])
         if (gk_optarg) params->ubvecstr = gk_strdup(gk_optarg);
         break;
 
-      case METIS_OPTION_NIPARTS:
-        if (gk_optarg) params->niparts = (idx_t)atoi(gk_optarg);
-        break;
       case METIS_OPTION_NCUTS:
         if (gk_optarg) params->ncuts = (idx_t)atoi(gk_optarg);
         break;
@@ -401,8 +371,8 @@ params_t *parse_cmdline(int argc, char *argv[])
     params->rtype   = METIS_RTYPE_FM;
   }
   if (params->ptype == METIS_PTYPE_KWAY) {
-    params->iptype = (params->iptype != -1 ? params->iptype : METIS_IPTYPE_METISRB);
-    params->rtype  = METIS_RTYPE_GREEDY;
+    params->iptype  = METIS_IPTYPE_METISRB;
+    params->rtype   = METIS_RTYPE_GREEDY;
   }
 
   /* Check for invalid parameter combination */

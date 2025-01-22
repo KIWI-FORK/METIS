@@ -16,7 +16,7 @@ r13937 | karypis | 2013-03-29 23:08:21 -0500 (Fri, 29 Mar 2013)
   line option and the associated options[] parameter (as described 
   in the manual).
 - Fixed 0/1 numbering issue with mesh partitioning routines (flyspray 
-  issue #109)
+   issue #109)
 
 
 metis-5.0.3
