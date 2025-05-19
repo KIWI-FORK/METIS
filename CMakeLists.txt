@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(METIS)
 
-if(APPLE)
+if(APPLE OR EMSCRIPTEN)
   set(GKLIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/GKlib)
 else()
   set(GKLIB_PATH "GKlib" CACHE PATH "path to GKlib")
