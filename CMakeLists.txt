@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.21)
 project(METIS C)
 
 set(SHARED FALSE CACHE BOOL "build a shared library")
@@ -36,17 +36,16 @@ include(./conf/gkbuild.cmake)
 
 # Add include directories.
 # i.e., the -I equivalent
-# include_directories(${GKLIB_PATH}/include)
-# include_directories(${CMAKE_INSTALL_PREFIX}/include)
+include_directories(include)
+include_directories(${GKLIB_PATH}/include)
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
 
 # List of paths that the compiler will search for library files.
 # i.e., the -L equivalent
-# link_directories(${GKLIB_PATH}/lib)
-# link_directories(${CMAKE_INSTALL_PREFIX}/lib)
+link_directories(${GKLIB_PATH}/lib)
+link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 
 # Recursively look for CMakeLists.txt in subdirs.
-include_directories(include)
-
 add_subdirectory("include")
 add_subdirectory("libmetis")
 add_subdirectory("programs")
